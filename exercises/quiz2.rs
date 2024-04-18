@@ -55,7 +55,29 @@ mod my_module {
         output
     }
 }
+//记录一种gpt的写法
+// mod my_module {
+//     use super::Command;
 
+//     pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
+//         let mut output: Vec<String> = vec![];
+//         for (string, command) in input.iter() {
+//             let transformed_string = match command {
+//                 Command::Uppercase => string.to_uppercase(),
+//                 Command::Trim => string.trim().to_string(),
+//                 Command::Append(n) => {
+//                     let mut appended_string = string.clone();
+//                     for _ in 0..*n {
+//                         appended_string.push_str("bar");
+//                     }
+//                     appended_string
+//                 }
+//             };
+//             output.push(transformed_string);
+//         }
+//         output
+//     }
+// }
 #[cfg(test)]
 mod tests {
     // TODO: What do we need to import to have `transformer` in scope?
