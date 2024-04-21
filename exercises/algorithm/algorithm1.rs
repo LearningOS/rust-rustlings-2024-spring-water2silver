@@ -3,18 +3,18 @@
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
 // I AM NOT DONE
-
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
+#[allow(unused_imports)]
 use std::vec::*;
 
 #[derive(Debug)]
-struct Node<T> {
+struct Node<T:std::cmp::PartialOrd+Clone> {
     val: T,
     next: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Node<T> {
+impl<T:std::cmp::PartialOrd+Clone> Node<T> {
     fn new(t: T) -> Node<T> {
         Node {
             val: t,
@@ -23,19 +23,19 @@ impl<T> Node<T> {
     }
 }
 #[derive(Debug)]
-struct LinkedList<T> {
+struct LinkedList<T:std::cmp::PartialOrd+Clone> {
     length: u32,
     start: Option<NonNull<Node<T>>>,
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T:std::cmp::PartialOrd+Clone> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T:std::cmp::PartialOrd+Clone> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -69,18 +69,47 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+	pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+		// TODO
+        let mut list = LinkedList::<T>::new();
+        let mut i = 0i32;
+        let mut j = 0i32;
+        let a =list_a.get(i).unwrap();
+        let b = a.to_owned();
+        while i<=list_a.length as i32-1 && j<=list_b.length as i32-1
+        {
+            if list_a.get(i)<list_b.get(j)
+            {
+                list.add(list_a.get(i).unwrap().clone());
+                i = i + 1;
+            }else {
+                list.add(list_b.get(j).unwrap().clone());
+                j = j + 1;
+            }
         }
+        while i<=list_a.length as i32-1
+        {
+            list.add(list_a.get(i).unwrap().clone());
+            i = i + 1;
+        }
+        while j<=list_b.length as i32-1
+        {
+            list.add(list_b.get(j).unwrap().clone());
+            j = j + 1;
+        }
+
+		// Self {
+        //     length: 0,
+        //     start: None,
+        //     end: None,
+        // }
+
+		list
 	}
 }
 
-impl<T> Display for LinkedList<T>
+impl<T:std::cmp::PartialOrd+Clone> Display for LinkedList<T>
 where
     T: Display,
 {
@@ -92,7 +121,7 @@ where
     }
 }
 
-impl<T> Display for Node<T>
+impl<T:std::cmp::PartialOrd+Clone> Display for Node<T>
 where
     T: Display,
 {
