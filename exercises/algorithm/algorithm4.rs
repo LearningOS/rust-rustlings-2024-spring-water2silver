@@ -3,7 +3,11 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
+
+/*
+挺难蚌的，重复的节点不要再往树里面插入了。
+*/
+#[allow(unused_imports)]
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -11,7 +15,7 @@ use std::fmt::Debug;
 #[derive(Debug)]
 struct TreeNode<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     value: T,
     left: Option<Box<TreeNode<T>>>,
@@ -21,14 +25,14 @@ where
 #[derive(Debug)]
 struct BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     root: Option<Box<TreeNode<T>>>,
 }
 
 impl<T> TreeNode<T>
 where
-    T: Ord,
+    T: Ord + Clone,
 {
     fn new(value: T) -> Self {
         TreeNode {
@@ -41,7 +45,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
 
     fn new() -> Self {
@@ -51,22 +55,75 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        if(self.search(value.clone()))
+        {
+            return;
+        }
+        let mut node  = Box::new(TreeNode::new(value.clone()));
+        node.left = None;
+        node.right = None;
+        match self.root{
+            Some(ref mut tree_node)=>{
+                tree_node.insert(value.clone());
+            },
+            None =>{
+                self.root = Some(node);
+            }
+        }
+
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        let mut current = self.root.as_ref();
+        while current.is_some()
+        {
+
+            if current.as_ref().unwrap().value == value
+            {
+                return true;
+            }else if current.as_ref().unwrap().value < value
+            {
+                current = current.unwrap().right.as_ref();
+            }else {
+                current = current.unwrap().left.as_ref();
+            }
+
+        }
+        return false;
     }
 }
 
 impl<T> TreeNode<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        if self.value < value
+        {
+            if self.right.is_some()
+            {
+                self.right.as_mut().unwrap().insert(value.clone());
+            }else {
+                let mut node = Box::new(TreeNode::new(value.clone()));
+                node.left = None;
+                node.right = None;
+                self.right = Some(node);
+            }
+        }else {
+            if self.left.is_some()
+            {
+                self.left.as_mut().unwrap().insert(value.clone());
+            }else {
+                let mut node = Box::new(TreeNode::new(value.clone()));
+                node.left = None;
+                node.right = None;
+                self.left = Some(node);
+            }
+        }
     }
 }
 

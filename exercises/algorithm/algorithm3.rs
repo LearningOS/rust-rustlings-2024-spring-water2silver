@@ -3,10 +3,25 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
+/*
+rust版本的冒泡排序
+*/
 
-fn sort<T>(array: &mut [T]){
+use std::mem::swap;
+
+fn sort<T: std::cmp::PartialOrd>(array: &mut [T]){
 	//TODO
+    
+    for i in 0..array.len()
+    {
+        for j in i+1..array.len()
+        {
+            if array[i]>array[j]
+            {
+                array.swap(j, i);
+            }
+        }
+    }
 }
 #[cfg(test)]
 mod tests {

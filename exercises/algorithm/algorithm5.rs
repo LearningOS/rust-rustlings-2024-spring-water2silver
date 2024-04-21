@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic BFS algorithm
 */
 
-//I AM NOT DONE
 use std::collections::VecDeque;
 
 // Define a graph
@@ -29,8 +28,47 @@ impl Graph {
     fn bfs_with_return(&self, start: usize) -> Vec<usize> {
         
 		//TODO
-
         let mut visit_order = vec![];
+        let mut vis = vec![0;self.adj.len()];
+        visit_order.push(start);
+        vis[start] = 1;
+        let mut queue: VecDeque<usize> = VecDeque::new();
+        queue.push_back(start);
+        while queue.len()!=0
+        {
+            
+            let point = queue.pop_front().unwrap();
+
+            //self.adj is Vec<Vec<usize>>, 
+            // for i in &self.adj[point]
+            // {
+            //     if vis[*i]==0
+            //     {
+            //         vis[*i] = 1;
+            //         queue.push_back(i.clone());
+            //         visit_order.push(i.clone());
+            //     }
+            // }
+
+            //GPT的解法
+
+            // 假设 vis 是一个 Vec<usize>
+            // 假设 queue 和 visit_order 是 Vec<usize> 类型的队列和访问顺序列表
+            // 遍历 self.adj[point] 中的每个元素
+            for &i in &self.adj[point] {
+            // 检查是否已经访问过
+                if vis[i] == 0 {
+                    // 标记为已访问
+                    vis[i] = 1;
+                    
+                    // 将未访问的节点添加到队列和访问顺序列表中
+                    queue.push_back(i);
+                    visit_order.push(i);
+                }
+            }
+
+        }
+        
         visit_order
     }
 }

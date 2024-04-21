@@ -3,7 +3,6 @@
 	This question requires you to use a stack to achieve a bracket match
 */
 
-// I AM NOT DONE
 #[derive(Debug)]
 struct Stack<T> {
 	size: usize,
@@ -32,8 +31,14 @@ impl<T> Stack<T> {
 	}
 	fn pop(&mut self) -> Option<T> {
 		// TODO
-		None
-	}
+		if self.is_empty()
+        {
+            return None;
+        }
+        let ans = self.data.pop();
+        self.size -= 1;
+        ans
+    }
 	fn peek(&self) -> Option<&T> {
 		if 0 == self.size {
 			return None;
@@ -102,7 +107,34 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 fn bracket_match(bracket: &str) -> bool
 {
 	//TODO
-	true
+    let mut s : Stack<u8> = Stack::new();
+    for &c in bracket.to_string().as_bytes() 
+    {
+        if(s.is_empty())
+        {
+            if(c=='[' as u8||c==']' as u8||c=='(' as u8|| c==')' as u8||c=='{' as u8||c=='}' as u8)
+            {
+                s.push(c);
+            }
+            continue;
+        }
+
+        if c=='[' as u8 || c=='{' as u8|| c=='(' as u8
+        {
+            s.push(c);
+        }else if c==']' as u8&&s.peek().unwrap().to_owned()=='[' as  u8
+        {
+            s.pop();
+        }else if c==')' as u8 && s.peek().unwrap().to_owned()=='(' as u8
+        {
+            s.pop();
+        }else if c=='}' as u8 && s.peek().unwrap().to_owned()=='{' as u8
+        {
+            s.pop();
+        }
+    }
+
+    return s.is_empty();
 }
 
 #[cfg(test)]
